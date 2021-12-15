@@ -52,7 +52,7 @@ class preload extends Phaser.Scene {
     window.bgMusic = this.sound.add("bgMusic", {
       loop: true,
     })
-    .setVolume(0.6);
+    .setVolume(0.3);
     window.bgMusic.play();
 
     
