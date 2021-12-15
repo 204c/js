@@ -1,6 +1,6 @@
-class gameover extends Phaser.Scene {
+class win extends Phaser.Scene {
     constructor() {
-      super("gameover");
+      super("win");
   
       // Put global variable here
     }
@@ -9,16 +9,16 @@ class gameover extends Phaser.Scene {
       // Preload all the assets here
       
       // Preload any images here
-      this.load.image('gameover', 'assets/gameoverScene.png');
+      this.load.image('win', 'assets/winScene.png');
 
   
     }
   
     create() {
-      console.log("*** gameover scene");
+      console.log("*** win scene");
   
-      this.add.image(0,0,'gameover').setOrigin(0,0);
-      console.log("This is gameover Scene")
+      this.add.image(0,0,'win').setOrigin(0,0);
+      console.log("This is win Scene")
 
       window.holdpresent1 = 0;
       window.holdpresent2 = 0;
@@ -31,10 +31,10 @@ class gameover extends Phaser.Scene {
       // Add any sound and music here
       // ( 0 = mute to 1 is loudest )
       window.bgMusic.stop()
-      this.gameoverSnd = this.sound.add('gameOverSnd').setVolume(0.8) // 10% volume
+      this.winGameSnd = this.sound.add('winGameSnd').setVolume(0.8) // 10% volume
   
-      this.gameoverSnd.play()
-      
+      this.winGameSnd.play()
+      //window.music = this.music
 
   
       // Check for spacebar or any key here
@@ -44,7 +44,7 @@ class gameover extends Phaser.Scene {
       spaceDown.on(
         "down",
         function () {
-          console.log("Jump to world scene");
+          console.log("Jump to preload scene");
   
           let playerPos = {};
           playerPos.x = 700;
@@ -52,13 +52,13 @@ class gameover extends Phaser.Scene {
           playerPos.dir = "back";
           
      
-          this.scene.start("world", { playerPos: playerPos });
+          this.scene.start("preload", { playerPos: playerPos });
           window.bgMusic.play()
         },
         this
       );
 
-    
+      
   
       
     }

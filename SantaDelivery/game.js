@@ -15,7 +15,14 @@
     // },
     backgroundColor: '#000000',
     pixelArt: true,
-    scene: [preload, world, gameover, mall1, room1, mall2, room2, mall3, room3 ]
+    scene: [preload, intro1, intro2, intro3, intro4, world, win, gameover, mall1, room1, mall2, room2, mall3, room3 ]
 };
 
 var game = new Phaser.Game(config);
+window.holdpresent1 = 0;
+window.holdpresent2 = 0;
+window.holdpresent3 = 0;
+window.heart = 3;
+window.task1 = 0;
+window.task2 = 0;
+window.task3 = 0;

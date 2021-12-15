@@ -35,6 +35,7 @@ class world extends Phaser.Scene {
 
   create() {
     console.log("*** world scene");
+    console.log("life: ", window.heart);
 
     //Step 3 - Create the map from main
     let map = this.make.tilemap({key:"world"});
@@ -57,64 +58,104 @@ class world extends Phaser.Scene {
     let winterTiles4 = map.addTilesetImage("winter_tileset4", "winter4");
     let winterTiles5 = map.addTilesetImage("winter_tileset5", "winter5");
     
-
+    let tilesArray = [ groundTiles, housesTiles, riverTiles, variousTiles, 
+      variousTiles2, variousTiles3, variousTiles4,variousTiles5, variousTiles6, 
+      winterTiles, winterTiles2,winterTiles3, winterTiles4, winterTiles5]
 
     // Step 5  Load in layers by layers
     this.groundLayer = map.createLayer(
-    "groundLayer", [groundTiles,variousTiles], 0, 0);
+    "groundLayer",tilesArray, 0, 0);
 
     this.roadLayer = map.createLayer(
-    "roadLayer", [groundTiles], 0, 0);
+    "roadLayer",tilesArray, 0, 0);
     
     this.riverLayer = map.createLayer(
-    "riverLayer", [riverTiles, variousTiles], 0, 0);
+    "riverLayer",tilesArray, 0, 0);
 
     this.housesLayer = map.createLayer(
-    "housesLayer", [housesTiles, variousTiles2], 0, 0);
+    "housesLayer",tilesArray, 0, 0);
 
     this.groundtextureLayer = map.createLayer(
-    "groundtextureLayer", [variousTiles2, winterTiles2, winterTiles3], 0, 0);
+    "groundtextureLayer",tilesArray, 0, 0);
 
     this.objectLayer = map.createLayer(
-    "objectLayer", [variousTiles, variousTiles2, variousTiles3, variousTiles4, 
-      variousTiles5, variousTiles6, winterTiles, winterTiles2, winterTiles3, 
-      winterTiles4, winterTiles5], 0, 0);
+    "objectLayer", tilesArray, 0, 0);
 
     this.snowLayer = map.createLayer(
-    "snowLayer", [variousTiles2], 0, 0);
+    "snowLayer", tilesArray, 0, 0);
 
-   
-    // Add main player here with physics.add.sprite
+   // health hearts
+  this.heart1 = this.add.image(50, 40, "heart").setScale(0.4).setScrollFactor(0).setVisible(false);
+  this.heart2 = this.add.image(100, 40, "heart").setScale(0.4).setScrollFactor(0).setVisible(false);
+  this.heart3 = this.add.image(150, 40, "heart").setScale(0.4).setScrollFactor(0).setVisible(false);
+ 
+ if (window.heart == 3) {
+  this.heart1.setVisible(true);
+  this.heart2.setVisible(true);
+  this.heart3.setVisible(true);
+  } else if (window.heart == 2) {
+  this.heart1.setVisible(true);
+  this.heart2.setVisible(true);
+  } else if (window.heart == 1) {
+  this.heart1.setVisible(true);
+  } 
     
-    this.physics.world.bounds.width = this.groundLayer.width;
-    this.physics.world.bounds.height = this.groundLayer.height; 
+  this.physics.world.bounds.width = this.groundLayer.width;
+  this.physics.world.bounds.height = this.groundLayer.height; 
+  
+  // gingerbread appear after dropped present
+   if (window.task1 == 1){
+    this.gingerbread1 = this.add
+    .sprite(500, 50, "gingerbread")
+    .setScale(0.6)
+    .setScrollFactor(0)
+    .setVisible(true);
+   }
 
-    //this.player = this.physics.add.sprite(700, 2994, 'back');
+   if (window.task2 == 1){
+    this.gingerbread2 = this.add
+    .sprite(550, 50, "gingerbread")
+    .setScale(0.6)
+    .setScrollFactor(0)
+    .setVisible(true);
+   }
+
+   if (window.task3 == 1){
+    this.gingerbread3 = this.add
+    .sprite(600, 50, "gingerbread")
+    .setScale(0.6)
+    .setScrollFactor(0)
+    .setVisible(true);
+   }
 
    // Receive position from init()
-   this.player = this.physics.add.sprite(
+    this.player = this.physics.add.sprite(
     this.playerPos.x,
     this.playerPos.y,
     this.playerPos.dir,
   );
 
-    //enable debug
-    window.player = this.player; 
+  //enable debug
+  window.player = this.player; 
 
     this.player.setCollideWorldBounds(true); // do not go out of this map
 
-    // collect item
+  // collect item ( present)
     this.present = this.physics.add.sprite(-10,-10, 'present');
+    this.present2 = this.physics.add.sprite(-10,-10, 'present2');
+    this.present3 = this.physics.add.sprite(-10,-10, 'present3');
 
-    // enemy
+
+    
+  // enemy
     this.deer = this.physics.add.sprite(368, 2180, 'deer').play("deer");
-    this.deer2 = this.physics.add.sprite(464, 1319, 'deer2').play("deer");
-    this.deer3 = this.physics.add.sprite(1168, 1307, 'deer3').play("deer");
-    this.deer4 = this.physics.add.sprite(304, 1731, 'deer4').play("deer");
-    this.deer5 = this.physics.add.sprite(1007, 459, 'deer5').play("deer");
-    this.deer6 = this.physics.add.sprite(336, 412, 'deer6').play("deer");
+    this.deer2 = this.physics.add.sprite(464, 1319, 'deer').play("deer");
+    this.deer3 = this.physics.add.sprite(1168, 1307, 'deer').play("deer");
+    this.deer4 = this.physics.add.sprite(304, 1731, 'deer').play("deer");
+    this.deer5 = this.physics.add.sprite(1007, 459, 'deer').play("deer");
+    this.deer6 = this.physics.add.sprite(336, 412, 'deer').play("deer");
 
-    // enemy tween
+  // enemy tween
     this.time.addEvent({
       delay: 1000,
       callback: this.moveLeftRight,
@@ -157,16 +198,13 @@ class world extends Phaser.Scene {
       loop: false,
     });
 
-
-
-
-    // Add time event / movement here
-
-    // get the tileIndex number in json, +1
-    //mapLayer.setTileIndexCallback(11, this.room1, this);
-
-    // Add custom properties in Tiled called "mouintain" as bool
-
+    this.physics.add.overlap(
+      this.player,
+      this.deer,
+      this.minusHealth1,
+      null,
+      this
+    );
 
     // create the arrow keys
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -179,62 +217,31 @@ class world extends Phaser.Scene {
     this.riverLayer.setCollisionByExclusion(-1, true);
     this.housesLayer.setCollisionByExclusion(-1, true);
     this.objectLayer.setCollisionByExclusion(-1, true);
-
+    
     this.physics.add.collider(this.player, this.roadLayer);
     this.physics.add.collider(this.player, this.riverLayer);
     this.physics.add.collider(this.player, this.housesLayer);
     this.physics.add.collider(this.player, this.objectLayer);
 
-    this.physics.add.overlap(
-      this.player,
-      this.deer,
-      this.deerOverlap,
-      null,
-      this
-    );
+   // enemy overlap
+    this.physics.add.overlap(this.player,this.deer,this.deerOverlap,null,this);
+    this.physics.add.overlap(this.player,this.deer2,this.deerOverlap,null,this);
+    this.physics.add.overlap(this.player,this.deer3,this.deerOverlap,null,this);
+    this.physics.add.overlap(this.player,this.deer4,this.deerOverlap,null,this);
+    this.physics.add.overlap(this.player,this.deer5,this.deerOverlap,null,this);
+    this.physics.add.overlap(this.player,this.deer6,this.deerOverlap,null,this);
 
-    this.physics.add.overlap(
-      this.player,
-      this.deer2,
-      this.deerOverlap,
-      null,
-      this
-    );
-
-    this.physics.add.overlap(
-      this.player,
-      this.deer3,
-      this.deerOverlap,
-      null,
-      this
-    );
-
-    this.physics.add.overlap(
-      this.player,
-      this.deer4,
-      this.deerOverlap,
-      null,
-      this
-    );
-
-    this.physics.add.overlap(
-      this.player,
-      this.deer5,
-      this.deerOverlap,
-      null,
-      this
-    );
-
-    this.physics.add.overlap(
-      this.player,
-      this.deer6,
-      this.deerOverlap,
-      null,
-      this
-    );
+  // exit
+ 
+     this.add.text(588, 40, "EXIT", {
+     font: "20px Courier",
+     fill: "#a90000",
+     });
+  
 
   } /////////////////// end of create //////////////////////////////
-  
+ 
+
   moveLeftRight() {
     console.log("moveDownUp");
     this.tweens.timeline({
@@ -344,12 +351,33 @@ class world extends Phaser.Scene {
   }
   
   update() {
+    
+    //win scene and condition
+    if ( this.player.x > 560 && this.player.x < 656 &&
+      this.player.y < 30 && window.task1 ==1 && window.task2 ==1 && window.task3 ==1 ) {
+        this.win();
+      }
+    
 
     // hold present
-    if (window.holdpresent == 1 ) {
-       
+    if (window.holdpresent1 == 1 ) {
+      
+      
       this.present.x = this.player.x+32
       this.present.y = this.player.y
+      
+
+    }
+    if (window.holdpresent2 == 1 ) {
+       
+      this.present2.x = this.player.x+32
+      this.present2.y = this.player.y
+
+    }
+    if (window.holdpresent3 == 1 ) {
+       
+      this.present3.x = this.player.x+32
+      this.present3.y = this.player.y
 
     }
     
@@ -430,31 +458,49 @@ class world extends Phaser.Scene {
 
 
     if (this.cursors.left.isDown) {
-      this.player.body.setVelocityX(-200);
+      this.player.body.setVelocityX(-350);
       this.player.anims.play("left", true); // walk left
     } 
     else if (this.cursors.right.isDown) {
-      this.player.body.setVelocityX(200);
+      this.player.body.setVelocityX(350);
       this.player.anims.play("right", true);
     } else if (this.cursors.up.isDown) {
-      this.player.body.setVelocityY(-200);
+      this.player.body.setVelocityY(-350);
       this.player.anims.play("back", true);
       //console.log('up');
     } else if (this.cursors.down.isDown) {
-      this.player.body.setVelocityY(200);
+      this.player.body.setVelocityY(350);
       this.player.anims.play("front", true);
       //console.log('down');
     } else {
       this.player.anims.stop();
       this.player.body.setVelocity(0, 0);
     }
+   
+
   } /////////////////// end of update //////////////////////////////
 
-  // Function hit deer
-  deerOverlap() {
+  // Function hit deer and deduct life
+  deerOverlap(player,deer) {
+    console.log( "deduct life");
     console.log( "deer overlap player");
-    this.scene.start("gameover");
-  }
+    window.heart--;
+    deer.disableBody (true,true);
+
+    this.cameras.main.shake(200);
+   
+    if( window.heart == 2){
+    this.heart3.setVisible(false)
+    } else if ( window.heart ==1 ){
+    this.heart2.setVisible(false)
+    } else if ( window.heart ==0){
+    this.heart1.setVisible(false)
+    console.log("you are dead") 
+    this.scene.start("gameover"); 
+    } 
+      }
+    
+   
 
   // Function to jump to mall1
   mall1(player, tile) {
@@ -479,6 +525,7 @@ class world extends Phaser.Scene {
     playerPos.dir = "front";
 
     this.scene.start("room1", { playerPos: playerPos });
+   
   }
 
   // Function to jump to mall2
@@ -528,6 +575,13 @@ class world extends Phaser.Scene {
 
     this.scene.start("room3", { playerPos: playerPos });
   }
+
+  //win scene
+  win() {
+    console.log("player win")
+    this.scene.start("win")
+  }
+
 
 
 } //////////// end of class world ////////////////////////

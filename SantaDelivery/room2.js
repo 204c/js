@@ -34,6 +34,8 @@ class room2 extends Phaser.Scene {
     }
     create() {
         console.log('*** room2 scene');
+        console.log("life: ", window.heart);
+
 
 
     //Step 3 - Create the map from main
@@ -62,26 +64,63 @@ class room2 extends Phaser.Scene {
 
     // Step 5  Load in layers by layers
     this.groundLayer = map.createLayer("groundLayer", tilesArray, 0, 0);
-
     this.objectLayer = map.createLayer("objectLayer", tilesArray, 0, 0);
-
     this.objectLayer_2 = map.createLayer("objectLayer_2", tilesArray, 0, 0);
-
     this.objectLayer_3 = map.createLayer("objectLayer_3", tilesArray, 0, 0);
-
     this.doorLayer = map.createLayer("doorLayer", tilesArray, 0, 0);
 
+    this.heart1 = this.add.image(50, 40, "heart").setScale(0.4).setScrollFactor(0).setVisible(false);
+    this.heart2 = this.add.image(100, 40, "heart").setScale(0.4).setScrollFactor(0).setVisible(false);
+    this.heart3 = this.add.image(150, 40, "heart").setScale(0.4).setScrollFactor(0).setVisible(false);
+ 
+    if (window.heart == 3) {
+    this.heart1.setVisible(true);
+    this.heart2.setVisible(true);
+    this.heart3.setVisible(true);
+    } else if (window.heart == 2) {
+    this.heart1.setVisible(true);
+    this.heart2.setVisible(true);
+    } else if (window.heart == 1) {
+    this.heart1.setVisible(true);
+    } 
 
     this.physics.world.bounds.width = this.groundLayer.width;
     this.physics.world.bounds.height = this.groundLayer.height; 
+
+    // gingerbread appear after dropped present
+   if (window.task1 == 1){
+    this.gingerbread1 = this.add
+    .sprite(500, 50, "gingerbread")
+    .setScale(0.6)
+    .setScrollFactor(0)
+    .setVisible(true);
+   }
+
+   if (window.task2 == 1){
+    this.gingerbread2 = this.add
+    .sprite(550, 50, "gingerbread")
+    .setScale(0.6)
+    .setScrollFactor(0)
+    .setVisible(true);
+   }
+
+   if (window.task3 == 1){
+    this.gingerbread3 = this.add
+    .sprite(600, 50, "gingerbread")
+    .setScale(0.6)
+    .setScrollFactor(0)
+    .setVisible(true);
+   }
+
 
     // player position in room
     this.player = this.physics.add.sprite(642, 180, 'front');
 
     // Collect item
-    this.present = this.physics.add.sprite(-10,-10, 'present');
+    this.present2 = this.physics.add.sprite(-10,-10, 'present2');
 
-
+    //gingerbread
+   this.gingerbread2 = this.add.sprite(550, 50, "gingerbread").setScale(0.6).setScrollFactor(0).setVisible(false);
 
     //enable debug
     window.player = this.player; 
@@ -109,31 +148,34 @@ class room2 extends Phaser.Scene {
     update() {
 
     // hold and dropoff present
-    if ( window.holdpresent == 1 ) {
+    if ( window.holdpresent2 == 1 ) {
        
-        this.present.x = this.player.x+32
-        this.present.y = this.player.y
+        this.present2.x = this.player.x+32
+        this.present2.y = this.player.y
   
       }
 
     if (
-        this.player.x > 620 && 
-        this.player.x < 624 && 
-        this.player.y > 290 && 
-        this.player.y < 304
+        this.player.x > 610 && 
+        this.player.x < 630 && 
+        this.player.y > 280 && 
+        this.player.y < 300
         ) {
 
-          console.log("droppresent")
-          window.holdpresent = 0
+          this.gingerbread2.setVisible(true);
+
+          console.log("droppresent2")
+          window.holdpresent2 = 0
+          window.task2 = 1
 
           }
 
         // check for room2 exit
     if ( 
-        this.player.x > 624 && 
-        this.player.x < 656 && 
+        this.player.x > 620 && 
+        this.player.x < 660 && 
         this.player.y > 140 && 
-        this.player.y < 160
+        this.player.y < 170
         ) {
   
           this.world();
@@ -141,18 +183,18 @@ class room2 extends Phaser.Scene {
           }
 
         if (this.cursors.left.isDown) {
-            this.player.body.setVelocityX(-200);
+            this.player.body.setVelocityX(-350);
             this.player.anims.play("left", true); // walk left
           } 
           else if (this.cursors.right.isDown) {
-            this.player.body.setVelocityX(200);
+            this.player.body.setVelocityX(350);
             this.player.anims.play("right", true);
           } else if (this.cursors.up.isDown) {
-            this.player.body.setVelocityY(-200);
+            this.player.body.setVelocityY(-350);
             this.player.anims.play("back", true);
             //console.log('up');
           } else if (this.cursors.down.isDown) {
-            this.player.body.setVelocityY(200);
+            this.player.body.setVelocityY(350);
             this.player.anims.play("front", true);
             //console.log('down');
           } else {
